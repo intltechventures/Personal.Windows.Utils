@@ -15,50 +15,71 @@ c:
 cd \
 ECHO.
 ECHO My "Shazam" Script - Automated Rescue Steps for Cleaning-up a Corrupted Windows System
+ECHO (NOTE: You must run this as an Administrator)
 ECHO.
 ECHO You should make a full backup of your computer before proceeding with running this script
 pause
 
 
 ECHO.
-ECHO STEP-1.0: 
-ECHO 	- Command: chkdsk /scan /perf
-pause
-chkdsk c: /scan /perf
+ECHO STEP-0.0: Creating new SHAZAM.log
+if exist SHAZAM.log rm SHAZAM.log 
+touch SHAZAM.log
 
 
 ECHO.
-ECHO STEP-2: Run DISM to repair an image of Windows 10
-ECHO 	- 2.1) First, Check health of Windows Image, 
-ECHO 	- Command: DISM.exe /Online /Cleanup-image /CheckHealth
-pause
-DISM.exe /Online /Cleanup-image /CheckHealth
+ECHO STEP-1.0: Check systeminfo after forced update
+systeminfo >> SHAZAM.log
 
-ECHO 	- 2.2) Second, Restore health of Windows Image, 
-ECHO 	- Command: DISM.exe /Online /Cleanup-image /RestoreHealth
-pause
-DISM.exe /Online /Cleanup-image /Restorehealth
 
 ECHO.
-ECHO STEP-3.0: Run SFC to repair installation problems of Windows 10
-ECHO	- Command: sfc/scannow
+ECHO STEP-2: Create Restore Point
+ECHO 	Command: Wmic.exe /Namespace:\\root\default Path SystemRestore Call CreateRestorePoint "%DATE% Shazam Restore", 100, 1
+Wmic.exe /Namespace:\\root\default Path SystemRestore Call CreateRestorePoint "%DATE% Shazam Restore", 100, 1 >> SHAZAM.log
+
+
+ECHO.
+ECHO STEP-3.0: 
+ECHO 	Command: chkdsk /scan /perf
+pause
+chkdsk c: /scan /perf  >> SHAZAM.log
+
+
+ECHO.
+ECHO STEP-4.0: Run DISM to repair an image of Windows 10
+ECHO 4.1) First, Check health of Windows Image, 
+ECHO 	Command: DISM.exe /Online /Cleanup-image /CheckHealth
+pause
+DISM.exe /Online /Cleanup-image /CheckHealth  >> SHAZAM.log
+
+ECHO 4.2) Second, Restore health of Windows Image, 
+ECHO 	Command: DISM.exe /Online /Cleanup-image /RestoreHealth
+pause
+DISM.exe /Online /Cleanup-image /Restorehealth  >> SHAZAM.log
+
+ECHO.
+ECHO STEP-5.0: Run SFC to repair installation problems of Windows 10
+ECHO	Command: sfc/scannow  >> SHAZAM.log
 pause
 sfc /scannow
 
 ECHO.
-ECHO STEP-4:
-ECHO 	- Force Windows Update
-ECHO	- Command: wuauclt.exe /updatenow
+ECHO STEP-6.0: Force Windows Update
+ECHO	Command: wuauclt.exe /updatenow
 pause 
 REM wuauclt.exe /updatenow
-PowerShell.exe (New-Object -ComObject Microsoft.Update.AutoUpdate).DetectNow()
-wuauclt.exe /detectnow
+PowerShell.exe (New-Object -ComObject Microsoft.Update.AutoUpdate).DetectNow()   >> SHAZAM.log
+wuauclt.exe /detectnow  >> SHAZAM.log
+
 
 ECHO.
-ECHO STEP-5:
-ECHO	- REVIEW Windows Update %windir%/Logs/CBS/CBS.log
+ECHO STEP-7.0: Check systeminfo after forced update
+systeminfo >> SHAZAM.log
+
+ECHO.
+ECHO STEP-8.0: REVIEW Windows Update results in %windir%/Logs/CBS/CBS.log
 pause
-findstr /c:"[SR]" %windir%\Logs\CBS\CBS.log >"%userprofile%\Desktop\sfcdetails.txt" 
+findstr /c:"[SR]" %windir%\Logs\CBS\CBS.log > "%userprofile%\Desktop\sfcdetails.txt" 
 more %userprofile%\Desktop\sfcdetails.txt
 
 :FINISHED
