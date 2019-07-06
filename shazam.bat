@@ -35,7 +35,7 @@ systeminfo >> SHAZAM.log
 ECHO.
 ECHO STEP-2: Create Restore Point
 ECHO 	Command: Wmic.exe /Namespace:\\root\default Path SystemRestore Call CreateRestorePoint "%DATE% Shazam Restore", 100, 1
-Wmic.exe /Namespace:\\root\default Path SystemRestore Call CreateRestorePoint "%DATE% Shazam Restore", 100, 1 >> SHAZAM.log
+Wmic.exe /Namespace:\\root\default Path SystemRestore Call CreateRestorePoint "%DATE% Shazam Script - Restore Point Created", 100, 1 >> SHAZAM.log
 
 
 ECHO.
