@@ -1,3 +1,5 @@
+@ECHO OFF
+cls
 REM 
 REM ***************************************************************************
 REM Shazam Script - Automated Rescue Steps for a Corrupted Windows System
@@ -8,15 +10,15 @@ REM International Technology Ventures, Inc.
 REM https://www.intltechventures.com
 REM ***************************************************************************
 REM 
-cls
-@ECHO OFF
+pushd .
 c:
 cd \
+ECHO.
 ECHO My "Shazam" Script - Automated Rescue Steps for Cleaning-up a Corrupted Windows System
 ECHO.
 ECHO You should make a full backup of your computer before proceeding with running this script
 pause
-cls
+
 
 ECHO.
 ECHO STEP-1.0: 
@@ -62,7 +64,7 @@ more %userprofile%\Desktop\sfcdetails.txt
 :FINISHED
 ECHO.
 ECHO Shazam Script Completed!
-pause
+popd
 goto EXIT 
 
 REM Some helpful articles
