@@ -6,9 +6,10 @@ REM Shazam Script - Automated Rescue Steps for a Corrupted Windows System
 REM Author: Kelvin D. Meeks
 REM Email: kmeeks@intltechventures.com 
 REM Created: 2019-07-01
-REM Version: 1.3, 2019-07-06
-REM International Technology Ventures, Inc.
-REM https://www.intltechventures.com
+REM Version: 1.3.1, 2019-07-07
+REM
+REM Github Location:
+REM https://github.com/intltechventures/Personal.Windows.Utils/blob/master/shazam.bat
 REM
 REM
 REM DISCLAIMER:
@@ -61,7 +62,7 @@ pause
 ECHO.
 ECHO =======================================================================================
 ECHO STEP-2: Create Restore Point
-ECHO 	Command: Wmic.exe /Namespace:\\root\default Path SystemRestore Call CreateRestorePoint "%DATE% Shazam Restore Point Created", 100, 1
+ECHO 	Command: Wmic.exe /Namespace:\\root\default Path SystemRestore Call CreateRestorePoint "%DATE% Shazam Script - Restore Point Created", 100, 1
 Wmic.exe /Namespace:\\root\default Path SystemRestore Call CreateRestorePoint "%DATE% Shazam Script - Restore Point Created", 100, 1 
 pause
 
@@ -70,7 +71,7 @@ pause
 ECHO.
 ECHO =======================================================================================
 ECHO STEP-3.0: Scan and Fix any Disk Errors
-ECHO 	Command: chkdsk /scan /perf
+ECHO 	Command: chkdsk /scan /perf /V
 chkdsk c: /scan /perf /V  
 pause 
 
@@ -86,7 +87,7 @@ ECHO STEP-4.1: Update Anti-Virus Signature Definitions
 
 ECHO.
 ECHO STEP-4.2: Run Full Anti-Virus Scan
-"%ProgramFiles%\Windows Defender\MpCmdRun.exe" -Scan -ScanTpe 2
+"%ProgramFiles%\Windows Defender\MpCmdRun.exe" -Scan -ScanType 2
 
 
 
@@ -115,7 +116,7 @@ pause
 ECHO.
 ECHO =======================================================================================
 ECHO STEP-6.0: Run SFC to repair installation problems of Windows 10
-ECHO	Command: sfc/scannow  
+ECHO	Command: sfc /scannow  
 sfc /scannow
 pause
 
@@ -154,6 +155,9 @@ goto EXIT
 
 REM Some helpful articles:
 REM
+REM https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-antivirus/command-line-arguments-windows-defender-antivirus
+REM https://github.com/MicrosoftDocs/windows-itpro-docs/blob/master/windows/security/threat-protection/windows-defender-antivirus/command-line-arguments-windows-defender-antivirus.md
+REM https://www.windowscentral.com/how-use-windows-defender-command-prompt-windows-10
 REM https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/repair-a-windows-image
 REM https://support.microsoft.com/en-us/help/10164/fix-windows-update-errors
 REM https://support.microsoft.com/en-us/help/947821/fix-windows-update-errors-by-using-the-dism-or-system-update-readiness
