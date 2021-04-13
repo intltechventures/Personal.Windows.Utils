@@ -72,3 +72,17 @@ ECHO.
 pause
 Dism.exe /online /Cleanup-Image /SPSuperseded
 
+
+
+ECHO.
+ECHO Check C:\Users\Kelvin\AppData\Local\CrashDumps
+ECHO. 
+pushd
+c:
+cd C:\Users\Kelvin\AppData\Local\CrashDumps
+ls -lsa 
+pause
+popd
+
+
+
