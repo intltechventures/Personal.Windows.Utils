@@ -6,7 +6,10 @@ REM Shazam Script - Automated Rescue Steps for a Corrupted Windows System
 REM Author: Kelvin D. Meeks
 REM Email: kmeeks@intltechventures.com 
 REM Created: 2019-07-01
-REM Version: 1.3.1, 2019-07-07
+ECHO Shazam Script - prepared by Kelvin D. Meeks
+ECHO Automated rescue steps for cleaning-up a corrupted Microsoft Windows system
+ECHO Version: 1.3.3, 2021-04-12
+ECHO.
 REM
 REM Github Location:
 REM https://github.com/intltechventures/Personal.Windows.Utils/blob/master/shazam.bat
@@ -43,8 +46,7 @@ pushd .
 c:
 cd \
 ECHO.
-ECHO My "Shazam" Script - Automated Rescue Steps for Cleaning-up a Corrupted Windows System
-ECHO (NOTE: You must run this as an Administrator)
+ECHO NOTE: You must run this as an Administrator
 ECHO.
 ECHO You should make a full backup of your computer before proceeding with running this script
 pause
@@ -91,34 +93,43 @@ ECHO STEP-4.2: Run Full Anti-Virus Scan
 
 
 
-ECHO.
-ECHO =======================================================================================
-ECHO STEP-5.0: Run DISM to repair an image of Windows 10
 
 ECHO.
 ECHO =======================================================================================
-ECHO 5.1) First, Check health of Windows Image, 
-ECHO 	Command: DISM.exe /Online /Cleanup-image /ScanHealth
-ECHO    Command: DISM.exe /Online /Cleanup-image /CheckHealth
-DISM.exe /Online /Cleanup-image /ScanHealth
+ECHO STEP-5.0: Run SFC to repair installation problems of Windows 10
+REM 
+REM https://support.microsoft.com/en-us/topic/use-the-system-file-checker-tool-to-repair-missing-or-corrupted-system-files-79aa86cb-ca52-166a-92a3-966e85d4094e
+REM 
+ECHO	Command: sfc /scannow  
+sfc /scannow
+pause
+
+
+
+
+ECHO.
+ECHO =======================================================================================
+ECHO STEP-6.0: Run DISM to repair an image of Windows 10
+REM https://win10.guru/dism-whats-the-difference-between-scanhealth-and-checkhealth/
+ECHO.
+ECHO =======================================================================================
+ECHO 6.1) First, Check health of Windows Image:
+ECHO 6.1a) Command: DISM.exe /Online /Cleanup-image /CheckHealth - fast check
 DISM.exe /Online /Cleanup-image /CheckHealth
+pause
+ECHO.
+ECHO 6.1b) Command: DISM.exe /Online /Cleanup-image /ScanHealth - deep check
+DISM.exe /Online /Cleanup-image /ScanHealth
 pause
 
 
 ECHO.
 ECHO =======================================================================================
-ECHO 5.2) Second, Restore health of Windows Image, 
+ECHO 6.2) Second, Restore health of Windows Image:
 ECHO 	Command: DISM.exe /Online /Cleanup-image /RestoreHealth
 DISM.exe /Online /Cleanup-image /RestoreHealth
 pause
 
-
-ECHO.
-ECHO =======================================================================================
-ECHO STEP-6.0: Run SFC to repair installation problems of Windows 10
-ECHO	Command: sfc /scannow  
-sfc /scannow
-pause
 
 ECHO.
 ECHO =======================================================================================
