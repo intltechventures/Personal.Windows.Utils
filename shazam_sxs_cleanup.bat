@@ -6,8 +6,8 @@ REM Shazam Script - Disk Cleanup
 REM Author: Kelvin D. Meeks
 REM Email: kmeeks@intltechventures.com 
 REM Created: 2021-04-04
-REM Updated: 2021-04-04
-REM Version: 1.0.0
+REM Updated: 2021-09-21
+REM Version: 1.0.1
 REM
 REM Github Location:
 REM https://github.com/intltechventures/Personal.Windows.Utils/blob/master/shazam_disk_cleanup.bat
@@ -73,6 +73,25 @@ pause
 Dism.exe /online /Cleanup-Image /SPSuperseded
 
 
+ECHO.
+ECHO List Shadow Copies (Restore Points)
+ECHO.
+ECHO vssadmin List Shadows 
+ECHO.
+pause
+vssadmin List Shadows
+
+
+
+ECHO.
+ECHO Delete Shadow Copies (Restore Points) on Drive C:\
+ECHO.
+ECHO vssadmin Delete Shadows /For=C:
+ECHO.
+pause
+vssadmin Delete Shadows /For=C:
+
+
 
 ECHO.
 ECHO Check C:\Users\Kelvin\AppData\Local\CrashDumps
@@ -83,6 +102,28 @@ cd C:\Users\Kelvin\AppData\Local\CrashDumps
 ls -lsa 
 pause
 popd
+
+
+
+ECHO.
+ECHO Check Google Cache size: "%LocalAppData%\Google\Chrome\User Data\Default\Cache"
+ECHO.
+pushd
+c:
+dir /N "%LocalAppData%\Google\Chrome\User Data\Default\Cache"
+pause 
+popd 
+
+
+
+ECHO.
+ECHO Check Windows Temp folder/content size: "C:\Windows\Temp"
+ECHO.
+pushd
+c:
+dir /N C:\Windows\Temp
+pause 
+popd 
 
 
 
