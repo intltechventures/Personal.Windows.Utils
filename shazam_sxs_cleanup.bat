@@ -6,8 +6,8 @@ REM Shazam Script - Disk Cleanup
 REM Author: Kelvin D. Meeks
 REM Email: kmeeks@intltechventures.com 
 REM Created: 2021-04-04
-REM Updated: 2021-09-21
-REM Version: 1.0.1
+REM Updated: 2023-04-12
+REM Version: 1.0.2
 REM
 REM Github Location:
 REM https://github.com/intltechventures/Personal.Windows.Utils/blob/master/shazam_disk_cleanup.bat
@@ -110,7 +110,7 @@ ECHO Check Google Cache size: "%LocalAppData%\Google\Chrome\User Data\Default\Ca
 ECHO.
 pushd
 c:
-dir /N "%LocalAppData%\Google\Chrome\User Data\Default\Cache"
+dir /Q /OS /N "%LocalAppData%\Google\Chrome\User Data\Default\Cache"
 pause 
 popd 
 
@@ -121,7 +121,7 @@ ECHO Check Windows Temp folder/content size: "C:\Windows\Temp"
 ECHO.
 pushd
 c:
-dir /N C:\Windows\Temp
+dir /Q /OS /N C:\Windows\Temp
 pause 
 popd 
 
