@@ -12,4 +12,4 @@ REM OFF
 REM https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/chkdsk?tabs=event-viewer
 REM ON 
 ECHO 	Command: chkdsk /scan /perf /sdcleanup
-chkdsk c: /scan /perf /sdcleanup
+chkdsk c: /scan /perf /sdcleanup /forceofflinefix /offlinescanandfix 
