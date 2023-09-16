@@ -84,7 +84,7 @@ REM https://learn.microsoft.com/en-us/windows-server/administration/windows-comm
 REM ON 
 ECHO 	Command: chkdsk /scan /perf 
 pause
-chkdsk c: /scan /perf /sdcleanup
+chkdsk c: /scan /perf 
  
 
 
@@ -107,8 +107,9 @@ ECHO.
 ECHO =======================================================================================
 ECHO STEP-5.0: Run DISM to repair an image of Windows 10
 REM OFF 
-REM https://win10.guru/dism-whats-the-difference-between-scanhealth-and-checkhealth/
 REM https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/deployment-image-servicing-and-management--dism--command-line-options?view=windows-10
+REM https://www.windowscentral.com/how-use-dism-command-line-utility-repair-windows-10-image
+REM https://win10.guru/dism-whats-the-difference-between-scanhealth-and-checkhealth/
 REM ON 
 ECHO.
 ECHO =======================================================================================
@@ -116,13 +117,13 @@ ECHO 5.1) First, Check health of Windows Image:
 
 pause 
 ECHO 5.1a) Command: DISM.exe /Online /CheckHealth - fast check
-DISM.exe /Online /CheckHealth
-
+DISM.exe /Online /Cleanup-Image /CheckHealth
+ 
 pause
 ECHO.
 ECHO. 
 ECHO 5.1b) Command: DISM.exe /Online  /ScanHealth - deep check
-DISM.exe /Online /ScanHealth
+DISM.exe /Online /Cleanup-Image /ScanHealth
 
 
 ECHO. 
