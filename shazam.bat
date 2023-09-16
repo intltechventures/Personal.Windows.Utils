@@ -1,15 +1,17 @@
 @ECHO OFF
 cls
+ECHO Shazam Script utility - prepared by Kelvin D. Meeks
+ECHO Purpose: Automated rescue steps for cleaning-up a corrupted Microsoft Windows system
+ECHO https://github.com/intltechventures/Personal.Windows.Utils/blob/master/shazam.bat
+ECHO Version: 1.4.0, 2023-09-16
+ECHO.
+REM OFF 
 REM 
 REM ***************************************************************************
 REM Shazam Script - Automated Rescue Steps for a Corrupted Windows System
 REM Author: Kelvin D. Meeks
 REM Email: kmeeks@intltechventures.com 
 REM Created: 2019-07-01
-ECHO Shazam Script - prepared by Kelvin D. Meeks
-ECHO Automated rescue steps for cleaning-up a corrupted Microsoft Windows system
-ECHO Version: 1.3.3, 2021-04-12
-ECHO.
 REM
 REM Github Location:
 REM https://github.com/intltechventures/Personal.Windows.Utils/blob/master/shazam.bat
@@ -41,7 +43,8 @@ REM We assume no responsibility for errors or omissions in the software or docum
 REM 
 REM In no event shall we be liable to you or any third parties for any special, punitive, incidental, indirect or consequential damages of any kind, or any damages whatsoever, including, without limitation, those resulting from loss of use, data or profits, and on any theory of liability, arising out of or in connection with the use of this software.
 REM ***************************************************************************
-REM 
+REM ON 
+ECHO Save current directory location, then switch to C:\
 pushd .
 c:
 cd \
@@ -52,12 +55,13 @@ ECHO You should make a full backup of your computer before proceeding with runni
 pause
 
 
-
+ECHO.
 ECHO.
 ECHO =======================================================================================
 ECHO STEP-1.0: Check systeminfo before starting clean-up steps...
-systeminfo 
 pause
+systeminfo 
+
 
 
 
@@ -65,20 +69,26 @@ ECHO.
 ECHO =======================================================================================
 ECHO STEP-2: Create Restore Point
 ECHO 	Command: Wmic.exe /Namespace:\\root\default Path SystemRestore Call CreateRestorePoint "%DATE% Shazam Script - Restore Point Created", 100, 1
-Wmic.exe /Namespace:\\root\default Path SystemRestore Call CreateRestorePoint "%DATE% Shazam Script - Restore Point Created", 100, 1 
 pause
+Wmic.exe /Namespace:\\root\default Path SystemRestore Call CreateRestorePoint "%DATE% Shazam Script - Restore Point Created", 100, 1 
+
 
 
 
 ECHO.
+ECHO.
 ECHO =======================================================================================
 ECHO STEP-3.0: Scan and Fix any Disk Errors
-ECHO 	Command: chkdsk /scan /perf /V
-chkdsk c: /scan /perf /V  
-pause 
+REM OFF
+REM https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/chkdsk?tabs=event-viewer
+REM ON 
+ECHO 	Command: chkdsk /scan /perf 
+pause
+chkdsk c: /scan /perf /sdcleanup
+ 
 
 
-
+ECHO.
 ECHO.
 ECHO ======================================================================================= 
 ECHO STEP-4.0: Anti-Virus Scan 
@@ -92,66 +102,86 @@ ECHO STEP-4.2: Run Full Anti-Virus Scan
 "%ProgramFiles%\Windows Defender\MpCmdRun.exe" -Scan -ScanType 2
 
 
-
-
+ECHO.
 ECHO.
 ECHO =======================================================================================
-ECHO STEP-5.0: Run SFC to repair installation problems of Windows 10
-REM 
-REM https://support.microsoft.com/en-us/topic/use-the-system-file-checker-tool-to-repair-missing-or-corrupted-system-files-79aa86cb-ca52-166a-92a3-966e85d4094e
-REM 
-ECHO	Command: sfc /scannow  
-sfc /scannow
-pause
-
-
-
-
-ECHO.
-ECHO =======================================================================================
-ECHO STEP-6.0: Run DISM to repair an image of Windows 10
+ECHO STEP-5.0: Run DISM to repair an image of Windows 10
+REM OFF 
 REM https://win10.guru/dism-whats-the-difference-between-scanhealth-and-checkhealth/
+REM https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/deployment-image-servicing-and-management--dism--command-line-options?view=windows-10
+REM ON 
 ECHO.
 ECHO =======================================================================================
-ECHO 6.1) First, Check health of Windows Image:
-ECHO 6.1a) Command: DISM.exe /Online /Cleanup-image /CheckHealth - fast check
-DISM.exe /Online /Cleanup-image /CheckHealth
+ECHO 5.1) First, Check health of Windows Image:
+
+pause 
+ECHO 5.1a) Command: DISM.exe /Online /CheckHealth - fast check
+DISM.exe /Online /CheckHealth
+
 pause
 ECHO.
-ECHO 6.1b) Command: DISM.exe /Online /Cleanup-image /ScanHealth - deep check
-DISM.exe /Online /Cleanup-image /ScanHealth
-pause
+ECHO. 
+ECHO 5.1b) Command: DISM.exe /Online  /ScanHealth - deep check
+DISM.exe /Online /ScanHealth
 
 
+ECHO. 
 ECHO.
 ECHO =======================================================================================
-ECHO 6.2) Second, Restore health of Windows Image:
+ECHO 5.2) Second, Restore health of Windows Image:
 ECHO 	Command: DISM.exe /Online /Cleanup-image /RestoreHealth
+pause 
 DISM.exe /Online /Cleanup-image /RestoreHealth
-pause
+
+ECHO .
+ECHO .
+ECHO ...component cleanup 
+pause 
+dism.exe /online /cleanup-image /startcomponentcleanup
 
 
 ECHO.
 ECHO =======================================================================================
-ECHO STEP-7.0: Force Windows Update
+ECHO STEP-6.0: Force Windows Update
+ECHO. 
 ECHO    Command: wuauclt.exe /detectnow
-ECHO	Command: wuauclt.exe /updatenow
+pause
 PowerShell.exe (New-Object -ComObject Microsoft.Update.AutoUpdate).DetectNow()   
 wuauclt.exe /detectnow  
+
+ECHO. 
+ECHO. 
+ECHO	Command: wuauclt.exe /updatenow
 pause
 wuauclt.exe /updatenow
-pause
 
 
+ECHO. 
+ECHO.
+ECHO =======================================================================================
+ECHO STEP-7.0: Run SFC to repair installation problems of Windows 10
+REM OFF
+REM https://support.microsoft.com/en-us/topic/use-the-system-file-checker-tool-to-repair-missing-or-corrupted-system-files-79aa86cb-ca52-166a-92a3-966e85d4094e
+REM ON  
+ECHO. 
+ECHO	Command: sfc /scannow  
+pause 
+sfc /scannow
+
+
+ECHO.
 ECHO.
 ECHO =======================================================================================
 ECHO STEP-8.0: Check systeminfo after forced update...
-systeminfo 
 pause
+systeminfo 
 
+
+ECHO.
 ECHO.
 ECHO =======================================================================================
 ECHO STEP-9.0: REVIEW Windows Update results in %windir%/Logs/CBS/CBS.log
+ECHO.
 pause
 findstr /c:"[SR]" "%windir%\Logs\CBS\CBS.log" > "%userprofile%\Desktop\sfcdetails.txt" 
 more "%userprofile%\Desktop\sfcdetails.txt"
@@ -161,9 +191,14 @@ more "%userprofile%\Desktop\sfcdetails.txt"
 ECHO.
 ECHO =======================================================================================
 ECHO Shazam Script Completed!
+ECHO.
+ECHO.
+ECHO Return to previous directory location 
 popd
 goto EXIT 
 
+
+REM OFF 
 REM Some helpful articles:
 REM
 REM https://docs.microsoft.com/en-us/windows/security/threat-protection/windows-defender-antivirus/command-line-arguments-windows-defender-antivirus
@@ -176,7 +211,7 @@ REM https://venturebeat.com/2015/07/28/how-to-force-windows-to-start-downloading
 REM https://www.windowscentral.com/how-use-dism-command-line-utility-repair-windows-10-image
 REM https://support.microsoft.com/en-us/help/929833/use-the-system-file-checker-tool-to-repair-missing-or-corrupted-system
 REM https://social.technet.microsoft.com/Forums/Lync/en-US/7289c393-5ca0-44dd-8ac9-02f1144503d3/wuaucltexe-vs-check-for-updates?forum=winserverwsus
-
+RE MON 
 
 :EXIT 
 
