@@ -6,8 +6,8 @@ REM Shazam Script - Disk Cleanup
 REM Author: Kelvin D. Meeks
 REM Email: kmeeks@intltechventures.com 
 REM Created: 2021-04-04
-REM Updated: 2023-04-12
-REM Version: 1.0.2
+REM Updated: 2024-05-20
+REM Version: 1.1.0
 REM
 REM Github Location:
 REM https://github.com/intltechventures/Personal.Windows.Utils/blob/master/shazam_disk_cleanup.bat
@@ -94,11 +94,11 @@ vssadmin Delete Shadows /For=C:
 
 
 ECHO.
-ECHO Check C:\Users\Kelvin\AppData\Local\CrashDumps
+ECHO Check C:\Users\kmeek\AppData\Local\CrashDumps
 ECHO. 
 pushd
 c:
-cd C:\Users\Kelvin\AppData\Local\CrashDumps
+cd C:\Users\kmeek\AppData\Local\CrashDumps
 ls -lsa 
 pause
 popd
