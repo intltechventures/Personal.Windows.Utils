@@ -116,29 +116,27 @@ ECHO ===========================================================================
 ECHO 5.1) First, Check health of Windows Image:
 
 pause 
-ECHO 5.1a) Command: DISM.exe /Online /CheckHealth - fast check
+ECHO 5.1a) [re: fast check], DISM.exe /Online /Cleanup-Image /CheckHealth 
 DISM.exe /Online /Cleanup-Image /CheckHealth
  
-pause
 ECHO.
 ECHO. 
-ECHO 5.1b) Command: DISM.exe /Online  /ScanHealth - deep check
+ECHO 5.1b) [re: deep check], DISM.exe /Online /Cleanup-Image /ScanHealth 
+pause
 DISM.exe /Online /Cleanup-Image /ScanHealth
 
 
 ECHO. 
 ECHO.
-ECHO =======================================================================================
-ECHO 5.2) Second, Restore health of Windows Image:
-ECHO 	Command: DISM.exe /Online /Cleanup-image /RestoreHealth
+ECHO 5.1c) DISM.exe /Online /Cleanup-image /RestoreHealth
 pause 
 DISM.exe /Online /Cleanup-image /RestoreHealth
 
 ECHO .
 ECHO .
-ECHO ...component cleanup 
+ECHO 5.1c) DISM.exe /Online /Cleanup-image /startcomponentcleanup
 pause 
-dism.exe /online /cleanup-image /startcomponentcleanup
+dism.exe /Online /Cleanup-image /startcomponentcleanup
 
 
 ECHO.
