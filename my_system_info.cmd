@@ -1,5 +1,7 @@
 REM ***************************************************************************
 REM my_system_info.cmd 
+REM This batch script reports on selected system components (OS, hardware, and networking configuration.
+REM 
 REM Created: 2019-07-01
 REM 
 REM Author: Kelvin D. Meeks
@@ -39,11 +41,16 @@ REM
 REM ****************************************************************************
 REM Step: JOB_INITILIZATION 
 REM
-
+:JOB_INITIALIZATION
+TITLE %JOB_NAME%
 cls
 @ECHO OFF 
-:: This batch file reveals OS, hardware, and networking configuration.
-TITLE %JOB_NAME%
+popd 
+
+
+REM ****************************************************************************
+REM Step: JOB_START 
+REM
 :JOB_START
 ECHO.
 ECHO Starting %JOB_NAME%, version: %version%
@@ -53,8 +60,11 @@ ECHO Job Step: JOB_START
 powershell -c Get-Date -Format 'yyyy-MM-dd HH:mm:ss'"
 ECHO. 
 ECHO. 
-ECHO.
-:: Section-01: OS information.
+REM ****************************************************************************
+REM Report on OS information.
+REM 
+:STEP_REPORT_OS_INFO
+ECHO. 
 ECHO ============================
 ECHO OS INFO
 ECHO ============================
@@ -70,7 +80,11 @@ ECHO.
 powershell -c Get-CimInstance -ClassName Win32_BIOS
 ECHO. 
 ECHO.
-:: Section-02: Hardware information.
+REM ****************************************************************************
+REM Report on Hardware information.
+REM 
+:STEP_REPORT_HARDWARE_INFO
+ECHO. 
 ECHO ============================
 ECHO HARDWARE INFO - Physical Memory, CPU
 ECHO ============================
@@ -92,8 +106,11 @@ ECHO.
 powershell -c "Get-CimInstance Win32_Processor | Measure-Object -Property NumberOfCores, NumberOfLogicalProcessors, LoadPercentage -Sum -Average"
 ECHO.
 ECHO.
-ECHO.
-:: NETWORKING IFNO 
+REM ****************************************************************************
+REM Report on Network information.
+REM 
+:STEP_REPORT_NETWORK_INFO
+ECHO. 
 ECHO ============================
 ECHO NETWORK INFO
 ECHO ============================
@@ -105,12 +122,27 @@ ipconfig | findstr IPv6
 ECHO.
 ECHO.
 ipconfig /all
-:JOB_END
+ECHO. 
+ECHO.
+goto JOB_END
 REM ****************************************************************************
-REM Step: JOB_END 
+REM Step: ERROR_ABRT
+REM 
+REM Handle Error Message 
 REM 
 REM
+:ERROR_ABORT
+ECHO.
+ECHO Job Step: ERROR_ABORT 
+ECHO. 
+ECHO Error Message: %ERRORLEVEL%!
+ECHO. 
+ECHO. 
+REM ****************************************************************************
+REM Job Step: JOB_END 
+REM 
 :JOB_END
+REM ****************************************************************************
 ECHO.
 ECHO Job Step: JOB_END
 ECHO %JOB_NAME% Finished!
