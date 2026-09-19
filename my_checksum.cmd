@@ -1,6 +1,9 @@
 REM ****************************************************************************
-REM shazam_integrity_check.cmd
-REM Shazam Integrity Check utility script 
+REM my_checksum.cmd
+REM A general purpose utility to compute SHA512 or SHA256, for a given 
+REM parameter (filename) passed to this script - based on the presence of 
+REM a corresponding <filename.sha256> or <filename.sha512> in the same 
+REM directory. 
 REM 
 REM
 REM Author: Kelvin D. Meeks
